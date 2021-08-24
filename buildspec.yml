@@ -1,0 +1,27 @@
+# Do not change version. This is the version of aws buildspec, not the version of your buildspec file.
+version: 0.2
+
+
+phases:
+  pre_build:
+    commands:
+      - echo Navigating
+      - cd AppSync/lambda/lambdaTemplateTs
+      - echo Installing source NPM dependencies...
+      - npm ci
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Compiling the dist folder
+      - npm run compile
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - cd dist && mkdir node_modules && cd ..
+      - mv node_modules dist
+# Include only the files required for your application to run.
+artifacts:
+  name: lambdaTemplateTs.zip
+  base-directory: AppSync/lambda/lambdaTemplateTs/dist
+  files:
+    - '**/*'
